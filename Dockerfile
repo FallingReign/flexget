@@ -18,9 +18,9 @@ VOLUME  /flexget
 
 # Install flexget & plugins
 RUN     pip3 install -U pip \
-        && pip3 install flexget \
+        && pip3 install -U flexget \
         && pip3 install -U deluge_client \
-        && pip3 install subliminal>=2.0
+        && pip3 install -U subliminal>=2.0
    
 # Add init script
 COPY    etc/init.sh /home/flexget/
