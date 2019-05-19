@@ -3,24 +3,25 @@ FROM    python:3.6-alpine
 # Environment Vars
 ENV     PUID 1000
 ENV     PGID 1000
-ENV     TZ America/Los_Angeles
+ENV     TZ Australia/Melbourne
 
 # Update timezone
 RUN     apk add --no-cache tzdata
-RUN     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN     ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
+        && echo ${TZ} > /etc/timezone
 
 # Create a user
 RUN     adduser -D -u ${PUID} -g ${PGID} flexget
 WORKDIR /home/flexget/
 
 # Volumes
-VOLUME  /flexget
+VOLUME  /config
 
 # Install flexget & plugins
-RUN     pip3 install -U pip \
-        && pip3 install -U flexget \
-        && pip3 install -U deluge_client \
-        && pip3 install -U subliminal>=2.0
+RUN     pip3 install -U pip && pip3 install -U \
+        flexget \
+        deluge_client \
+        subliminal>=2.0
    
 # Add init script
 COPY    etc/init.sh /home/flexget/

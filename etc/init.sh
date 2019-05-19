@@ -7,15 +7,17 @@ if [ -f /config/.config-lock ]; then
   rm -f /config/.config-lock
 fi
 
-# Set FLEXGET_WEB_PASS
-if [[ ! -z "${FLEXGET_WEB_PASS}" ]]; then
-  echo "Setting FLEXGET_WEB_PASS: ${FLEXGET_WEB_PASS}"
-  flexget web passwd "${FLEXGET_WEB_PASS}"
-fi
-
 # Create logfile
 mkdir -p /config/logs/
 touch /config/logs/logfile.log
+
+# Set FLEXGET_WEB_PASS
+if [[ ! -z "${FLEXGET_WEB_PASS}" ]]; then
+  echo "Setting FLEXGET_WEB_PASS: ${FLEXGET_WEB_PASS}"
+  flexget -c "/config/config.yml" \
+    --logfile "/config/logs/logfile.log" \
+    web passwd "${FLEXGET_WEB_PASS}"
+fi
 
 # Run flexget
 flexget -c "/config/config.yml" \
