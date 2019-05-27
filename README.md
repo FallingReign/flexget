@@ -12,7 +12,7 @@ docker create \
   --name=flexget \
   -e PUID=1000 \
   -e PGID=1000 \
-  -e TZ=Australia/Melbourne \
+  -e TZ=Country/City \
   -p 5050:5050 \
   -v <path/to/config.yml>:/config \
   -v <path/to/media>:/media \
@@ -28,7 +28,7 @@ docker create \
 | `-p 5050` | The port for the flexget webinterface |
 | `-e PUID=1000` | for UserID |
 | `-e PGID=1000` | for GroupID |
-| `-e TZ=Australia/Melbourne` | Specify a timezone |
+| `-e TZ=Country/City` | Specify a [timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones_) |
 | `-v /config` | Flexget config files |
 | `-v /media` | Location of your media library on disk |
 | `-v /downloads` | Location of your download directory |
