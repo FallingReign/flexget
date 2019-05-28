@@ -18,29 +18,32 @@ fi
 mkdir -p /config/logs/
 touch /config/logs/logfile.log
 
+cd /config
+
 # Set User permissions
 if [ -n "${PUID}" ] && [ -n "${PGID}" ]; then
-  adduser -D -H -s /bin/sh -u ${PUID} flexget flexget
+  if [ -z "$(getent passwd flexget)" ]; then
+    adduser -D -s /bin/sh -u ${PUID} flexget flexget
+  else
+    usermod -u "${PUID}" flexget
+    groupmod -g "${PGID}" flexget
+  fi
+
   chown -R "${PUID}":"${PGID}" /config
   chmod -R 775 /config
 fi
 
 # Set FLEXGET_WEB_PASS
 if [[ ! -z "${FLEXGET_WEB_PASS}" ]]; then
-  echo "Setting FLEXGET_WEB_PASS: ${FLEXGET_WEB_PASS}"
+  echo "Setting FLEXGET_WEB_PASS"
   flexget -c "/config/config.yml" \
     --logfile "/config/logs/logfile.log" \
     web passwd "${FLEXGET_WEB_PASS}"
 fi
 
 # Run flexget
-if [ -n "${PUID}" ]; then
-  echo "Starting Flexget..."
-  su flexget -m -c \
-    exec 'flexget -c "/config/config.yml" \
-    --logfile "/config/logs/logfile.log" \
-    --loglevel "${FLEXGET_LOG_LEVEL:-debug}" \
-    daemon start --autoreload-config'
-else
-  echo "Flexget needs a PUID & PGID environment variable"
-fi
+echo "Starting Flexget..."
+flexget -c "/config/config.yml" \
+  --logfile "/config/logs/logfile.log" \
+  --loglevel "${FLEXGET_LOG_LEVEL:-debug}" \
+  daemon start --autoreload-config

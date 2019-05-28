@@ -1,7 +1,7 @@
 FROM    python:3.6-alpine
 
 # Install apks
-RUN     apk add --no-cache tzdata
+RUN     apk add --no-cache shadow tzdata
 
 # Install flexget & plugins
 RUN     pip3 install -U pip && pip3 install -U \
